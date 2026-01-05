@@ -373,13 +373,23 @@ async def make_async_web_call(
             ssl=os.getenv("USE_SSL", "false").lower() == "true"
         )
     ) as session:
-        async with session.request(method, url, headers=headers, json=payload) as resp:
-            try:
-                resp.raise_for_status()
-                return {"status": resp.status, "data": await resp.json()}
-            except Exception as e:
-                logger.error(f"Web call failed: {e}")
-                return {"status": resp.status, "data": {"error": str(e)}}
+        # For GET requests, don't send JSON payload
+        if method.upper() == "GET":
+            async with session.request(method, url, headers=headers) as resp:
+                try:
+                    resp.raise_for_status()
+                    return {"status": resp.status, "data": await resp.json()}
+                except Exception as e:
+                    logger.error(f"Web call failed: {e}")
+                    return {"status": resp.status, "data": {"error": str(e)}}
+        else:
+            async with session.request(method, url, headers=headers, json=payload) as resp:
+                try:
+                    resp.raise_for_status()
+                    return {"status": resp.status, "data": await resp.json()}
+                except Exception as e:
+                    logger.error(f"Web call failed: {e}")
+                    return {"status": resp.status, "data": {"error": str(e)}}
 
 
 def filter_conversation_messages_create_time(

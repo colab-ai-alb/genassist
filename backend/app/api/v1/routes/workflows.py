@@ -46,6 +46,7 @@ SUPPORTED_NODE_TYPES = [
     "sqlNode",
     "aggregatorNode",
     "jiraNode",
+    "confluenceNode",
     "mlModelInferenceNode",
     "trainDataSourceNode",
     "threadRAGNode",

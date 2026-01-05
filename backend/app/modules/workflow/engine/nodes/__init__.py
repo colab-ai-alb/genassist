@@ -4,6 +4,7 @@ Node implementations for the workflow engine.
 
 from .ml import MLModelInferenceNode, TrainDataSourceNode, TrainPreprocessNode, TrainModelNode
 from .jira_node import JiraNode
+from .confluence_node import ConfluenceNode
 from .chat_nodes import ChatInputNode, ChatOutputNode
 from .router_node import RouterNode
 from .agent_node import AgentNode
@@ -48,6 +49,7 @@ __all__ = [
     "SQLNode",
     "AggregatorNode",
     "JiraNode",
+    "ConfluenceNode",
     "MLModelInferenceNode",
     "TrainDataSourceNode",
     "TrainPreprocessNode",

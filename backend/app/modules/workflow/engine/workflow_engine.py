@@ -27,6 +27,7 @@ from app.modules.workflow.engine.nodes import (
     SQLNode,
     AggregatorNode,
     JiraNode,
+    ConfluenceNode,
     MLModelInferenceNode,
     TrainDataSourceNode,
     TrainPreprocessNode,
@@ -100,6 +101,7 @@ class WorkflowEngine:
         self.register_node_type("sqlNode", SQLNode)
         self.register_node_type("aggregatorNode", AggregatorNode)
         self.register_node_type("jiraNode", JiraNode)
+        self.register_node_type("confluenceNode", ConfluenceNode)
         self.register_node_type("mlModelInferenceNode", MLModelInferenceNode)
         self.register_node_type("trainDataSourceNode", TrainDataSourceNode)
         self.register_node_type("preprocessingNode", TrainPreprocessNode)

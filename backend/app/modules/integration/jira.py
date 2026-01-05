@@ -14,6 +14,39 @@ class JiraConnector:
         self.email = email
         self.api_token = api_token
 
+    def _get_auth_headers(self) -> Dict[str, str]:
+        """Generate authentication headers for Jira API."""
+        auth_str = f"{self.email}:{self.api_token}"
+        auth_bytes = base64.b64encode(auth_str.encode("utf-8")).decode("utf-8")
+        return {
+            "Content-Type": "application/json",
+            "Authorization": f"Basic {auth_bytes}",
+        }
+
+    async def get_task_details(
+        self,
+        task_id: str,
+    ) -> Dict[str, Any]:
+        """
+        Get task details from Jira by task ID.
+        
+        Args:
+            task_id: The Jira task/issue ID or key (e.g., "PROJ-123")
+            
+        Returns:
+            Dict containing:
+            - status: HTTP status code
+            - data: Task details including fields, summary, description, status, etc.
+        """
+        complete_url = f"https://{self.subdomain}/rest/api/3/issue/{task_id}"
+
+        headers = self._get_auth_headers()
+
+        # For GET requests, we pass empty payload
+        return await make_async_web_call(
+            method="GET", url=complete_url, headers=headers, payload={}
+        )
+
     async def create_task(
         self,
         space_key: str,
@@ -23,12 +56,7 @@ class JiraConnector:
         """Create a Jira task via the REST API."""
         complete_url = f"https://{self.subdomain}/rest/api/3/issue"
 
-        auth_str = f"{self.email}:{self.api_token}"
-        auth_bytes = base64.b64encode(auth_str.encode("utf-8")).decode("utf-8")
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Basic {auth_bytes}",
-        }
+        headers = self._get_auth_headers()
 
         payload = {
             "fields": {
